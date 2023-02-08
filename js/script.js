@@ -38,7 +38,7 @@ const greeting = document.querySelector('.greeting')
 function getTimeOfDay() {
   const todayDate = new Date()
   const hours = todayDate.getHours()
-  const greetingArr = ['Night', 'Morning', 'Afternoon', 'Evening']
+  const greetingArr = ['night', 'morning', 'afternoon', 'evening']
 
   return greetingArr[ Math.floor(hours / 6) ]
 }
@@ -46,7 +46,6 @@ function getTimeOfDay() {
 greeting.textContent = `Good ${getTimeOfDay()}`
 
 const userName = document.querySelector('.greeting-container input')
-console.log(userName)
 
 function setLocalStorage() {
   localStorage.setItem('userName', userName.value)
@@ -63,3 +62,52 @@ function getLocalStorage() {
 window.addEventListener('load', getLocalStorage)
 //2 greetings
 
+//3 slider
+const body = document.body
+let randomNum = getRandomNum(1, 20)
+
+console.log(randomNum)
+
+function getRandomNum(start, end) {
+  return Math.floor(Math.random() * end + start)
+}
+
+function setBg(randomNum) {
+  const timeOfDay = getTimeOfDay()
+  const bgNum = randomNum < 10 ? '0' + randomNum : randomNum
+
+  const img = new Image()
+  img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+  img.onload = () => {
+    body.style.backgroundImage = `url(${img.src})`
+  };
+}
+
+setBg(randomNum)
+
+const sliderPrev = document.querySelector('.slide-prev')
+const sliderNext = document.querySelector('.slide-next')
+
+function getSliderNext() {
+  if (randomNum == 20) {
+    randomNum = 1 
+  } else {
+    randomNum += 1
+  } 
+  setBg(randomNum)
+}
+
+function getSliderPrev() {
+  if (randomNum == 1) {
+    randomNum = 20
+  } else {
+    randomNum -= 1
+  }
+  setBg(randomNum)
+}
+
+sliderPrev.addEventListener('click', getSliderPrev)
+sliderNext.addEventListener('click', getSliderNext)
+
+
+//3 slider
