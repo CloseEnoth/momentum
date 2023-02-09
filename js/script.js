@@ -156,3 +156,73 @@ async function getQuotes() {
 
 getQuotes()
 //5 quote of the day
+//6 audioPlayer
+const audio = new Audio()
+const playPrevBtn = document.querySelector('.play-prev')
+const playNextBtn = document.querySelector('.play-next')
+const play = document.querySelector('.play')
+
+import playList from './playList.js';
+const playListContainer = document.querySelector('.play-list')
+
+playList.forEach(el => {
+  const li = document.createElement('li')
+  li.classList.add('play-item')
+  li.textContent = el.title
+  playListContainer.append(li)
+})
+
+let isPlay = false
+let playNum = 0
+
+play.addEventListener('click', doAudio)
+playPrevBtn.addEventListener('click', playPrev)
+playNextBtn.addEventListener('click', playNext)
+
+function setSrcAudio() {
+  audio.src = playList[playNum].src
+  audio.currentTime = 0;
+}
+
+function toggleBtn() {
+  play.classList.toggle('pause')
+}
+
+function playAudio() {
+  isPlay = true
+  audio.play()
+}
+
+function pauseAudio() {
+  isPlay = false
+  audio.pause()
+}
+
+function doAudio() {
+  if (isPlay === false) {
+    playAudio(); 
+    toggleBtn()
+  } else {
+    pauseAudio()
+    toggleBtn()
+  }
+}
+
+function playPrev() {
+  if (playNum === 0) playNum = playList.length - 1
+  else playNum -= 1
+  
+  setSrcAudio()
+  playAudio()
+}
+
+function playNext() {
+  if (playNum === playList.length - 1) playNum = 0
+  else playNum += 1
+
+  setSrcAudio()
+  playAudio()
+}
+
+setSrcAudio()
+//6 audioPlayer
