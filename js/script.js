@@ -43,7 +43,7 @@ function getTimeOfDay() {
   return greetingArr[ Math.floor(hours / 6) ]
 }
 
-greeting.textContent = `Good ${getTimeOfDay()}`
+greeting.textContent = `Good ${getTimeOfDay()} <>`
 
 const userName = document.querySelector('.greeting-container input')
 
@@ -108,6 +108,31 @@ function getSliderPrev() {
 
 sliderPrev.addEventListener('click', getSliderPrev)
 sliderNext.addEventListener('click', getSliderNext)
-
-
 //3 slider
+//4 weather
+const weatherIcon = document.querySelector('.weather-icon')
+const temperature = document.querySelector('.temperature')
+const weatherDescription = document.querySelector('.weather-description')
+const city = document.querySelector('.city')
+
+city.addEventListener('change', getWeather)
+
+async function getWeather() {
+  let userCity
+  if (city.value == '') {
+    userCity = city.placeholder
+  } else {
+    userCity = city.value
+  }
+  
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&lang=en&appid=c4ac632db3b589d82f8e8a1e83f39460&units=metric`
+  const res = await fetch(url)
+  const data = await res.json()
+
+  weatherIcon.classList.add(`owf-${data.weather[0].id}`)
+  temperature.textContent = data.main.temp
+  weatherDescription.textContent = data.weather[0].description
+}
+
+getWeather()
+//4 weather
