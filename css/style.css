@@ -261,10 +261,12 @@ body {
 
 .quote {
   min-height: 32px;
+  font-size: 22px;
 }
 
 .author {
   min-height: 20px;
+  font-size: 20px;
 }
 
 @media (max-width: 768px) {
