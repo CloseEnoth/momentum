@@ -34,11 +34,29 @@ body {
   padding: 20px;
 }
 
+.player-progress {
+  margin: 5px 0;
+  width: 100%;
+  height: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.player-time {
+  display: flex;
+  justify-content: space-between;
+}
+.player-current {
+}
+.player-total {
+}
+
 .player-controls {
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 120px;
+  width: 100%;
   margin-bottom: 28px;
 }
 

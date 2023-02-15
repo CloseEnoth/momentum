@@ -23,9 +23,9 @@ function showTime() {
 function showDate() {
   const todayDate = new Date()
 
-  const options = {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'UTC'};
+  const options = {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
   const currentDate = todayDate.toLocaleDateString('en-US', options);
-
+  console.log(todayDate.toLocaleDateString('en-US', ))
   date.textContent = currentDate
 }
 
@@ -226,3 +226,14 @@ function playNext() {
 
 setSrcAudio()
 //6 audioPlayer
+//7 audioPlayer + progressBar
+const currentSongTime = document.querySelector('.player-current')
+const totalSongTime = document.querySelector('.player-total')
+const playerProgress = document.querySelector('.player-progress')
+
+function updateProgressBar() {
+  playerProgress.max = audio.duration
+  playerProgress.value = audio.currentTime
+}
+
+//7 audioPlayer + progressBar
