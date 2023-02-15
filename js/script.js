@@ -164,7 +164,6 @@ const play = document.querySelector('.play')
 
 import playList from './playList.js';
 const playListContainer = document.querySelector('.play-list')
-
 playList.forEach(el => {
   const li = document.createElement('li')
   li.classList.add('play-item')
@@ -181,7 +180,7 @@ playNextBtn.addEventListener('click', playNext)
 
 function setSrcAudio() {
   audio.src = playList[playNum].src
-  audio.currentTime = 0;
+  audio.currentTime = 0;  
 }
 
 function toggleBtn() {
@@ -211,7 +210,7 @@ function doAudio() {
 function playPrev() {
   if (playNum === 0) playNum = playList.length - 1
   else playNum -= 1
-  
+  console.log(playNum)
   setSrcAudio()
   playAudio()
 }
@@ -231,9 +230,35 @@ const currentSongTime = document.querySelector('.player-current')
 const totalSongTime = document.querySelector('.player-total')
 const playerProgress = document.querySelector('.player-progress')
 
+playerProgress.addEventListener('change', changeProgressBar)
+
 function updateProgressBar() {
   playerProgress.max = audio.duration
   playerProgress.value = audio.currentTime
+  console.log(audio.currentTime)
+  totalSongTime.innerHTML = formateTime(Math.floor(audio.duration))
+
+  currentSongTime.innerHTML = formateTime(Math.floor(audio.currentTime))
+  if (currentSongTime.innerHTML === "NaN:NaN") {
+    currentSongTime.innerHTML = "0:00"
+  }
+}
+
+function formateTime(seconds) {
+  let min = Math.floor( seconds / 60 )
+  let sec = Math.floor( seconds - min * 60 )
+  
+  if (sec < 10) {
+    sec = `0${sec}`
+  }
+  
+  return `${min}:${sec}`
+}
+
+setInterval(updateProgressBar, 1000)
+
+function changeProgressBar() {
+  audio.currentTime = playerProgress.value
 }
 
 //7 audioPlayer + progressBar
