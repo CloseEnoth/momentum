@@ -174,6 +174,8 @@ playList.forEach(el => {
 let isPlay = false
 let playNum = 0
 
+audio.addEventListener('ended', playNext)
+
 play.addEventListener('click', doAudio)
 playPrevBtn.addEventListener('click', playPrev)
 playNextBtn.addEventListener('click', playNext)
@@ -232,13 +234,15 @@ const playerProgress = document.querySelector('.player-progress')
 
 playerProgress.addEventListener('change', changeProgressBar)
 
+setInterval(updateProgressBar, 500)
+
 function updateProgressBar() {
   playerProgress.max = audio.duration
   playerProgress.value = audio.currentTime
   console.log(audio.currentTime)
   totalSongTime.innerHTML = formateTime(Math.floor(audio.duration))
 
-  currentSongTime.innerHTML = formateTime(Math.floor(audio.currentTime))
+  currentSongTime.innerHTML = formateTime(Math.round(audio.currentTime))
   if (currentSongTime.innerHTML === "NaN:NaN") {
     currentSongTime.innerHTML = "0:00"
   }
@@ -254,8 +258,6 @@ function formateTime(seconds) {
   
   return `${min}:${sec}`
 }
-
-setInterval(updateProgressBar, 1000)
 
 function changeProgressBar() {
   audio.currentTime = playerProgress.value
