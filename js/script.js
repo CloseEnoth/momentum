@@ -264,3 +264,46 @@ function changeProgressBar() {
 }
 
 //7 audioPlayer + progressBar
+
+//9 unsplash
+
+async function setBgUnsplash() {
+  const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=nature&client_id=EBEOAig1tA_6M4FKJaDXDOTPSnF1f9OWHy7fdMGZwFs`;
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    const photo = await data.urls.regular
+
+    const img = new Image()
+    img.src = photo
+    img.onload = () => {
+      body.style.backgroundImage = `url(${img.src})`
+    };
+    console.log('unsplash done')
+  } catch (error) {
+    console.log('unsplash not working', error)
+  }
+}
+
+setBgUnsplash()
+
+const delay = ms => {
+  return new Promise(r => setTimeout(() => r(), ms))
+}
+
+async function setBgFlicker() {
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=0a5fae729645a274e2453ad765cb4d96&tags=nature&extras=url_l&format=json&nojsoncallback=1`
+  console.log('Flicker image generation...')
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log(data)
+    console.log('Flicker done')
+  } catch (error) {
+    console.log('Flicker error')
+  }
+
+}
+setBgFlicker()
+
+//9 unsplash
