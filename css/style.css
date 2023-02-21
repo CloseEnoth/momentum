@@ -80,14 +80,14 @@ input[type=range]::-webkit-slider-runnable-track {
   height: 8.4px;
   cursor: pointer;
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background-color: #3071a9;
+  background-color: goldenrod;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
   transition: background-color ease 1s;
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background-color: #367ebd;
+  background-color: gold;
 }
 
 input[type=range]:focus {
@@ -134,7 +134,11 @@ input[type=range]::-ms-track {
   list-style: none;
   opacity: .8;
   cursor: pointer;
-  transition: .3s;
+  transition: .5s;
+}
+
+.play-item__highlight {
+  color: gold;
 }
 
 .play-item:hover {

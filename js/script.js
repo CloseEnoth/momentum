@@ -12,10 +12,9 @@ function showTime() {
   time.textContent = `${hours}:${minutes}:${seconds}`
 
 
-  if (hours === 6 && minutes === 0 && seconds === 0) getTimeOfDay()
-  if (hours === 12 && minutes === 0 && seconds === 0) getTimeOfDay()
-  if (hours === 18 && minutes === 0 && seconds === 0) getTimeOfDay()
+  if (hours / 6 === 0 && minutes === 0 && seconds === 0) getTimeOfDay()
   if (hours === 0 && minutes === 0 && seconds === 0) getTimeOfDay()
+  
   showDate()
   setTimeout(showTime, 1000)
 }
@@ -23,7 +22,7 @@ function showTime() {
 function showDate() {
   const todayDate = new Date()
 
-  const options = {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
+  const options = {weekday: 'long',month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
   const currentDate = todayDate.toLocaleDateString('en-US', options);
   console.log(todayDate.toLocaleDateString('en-US', ))
   date.textContent = currentDate
@@ -113,27 +112,50 @@ sliderNext.addEventListener('click', getSliderNext)
 const weatherIcon = document.querySelector('.weather-icon')
 const temperature = document.querySelector('.temperature')
 const weatherDescription = document.querySelector('.weather-description')
+const wind = document.querySelector('.wind')
+const humidity = document.querySelector('.humidity')
 const city = document.querySelector('.city')
 
 city.addEventListener('change', getWeather)
 
 async function getWeather() {
   let userCity
+  userCity = getLocalStorageCity()
   if (city.value == '') {
     userCity = city.placeholder
   } else {
     userCity = city.value
   }
-  
+
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&lang=en&appid=c4ac632db3b589d82f8e8a1e83f39460&units=metric`
   const res = await fetch(url)
   const data = await res.json()
-
-  weatherIcon.classList.add(`owf-${data.weather[0].id}`)
-  temperature.textContent = data.main.temp
-  weatherDescription.textContent = data.weather[0].description
+  
+  try {
+    weatherIcon.classList.add(`owf-${data.weather[0].id}`)
+    temperature.textContent = `${Math.round(data.main.temp)} °C`
+    wind.textContent = `${Math.round(data.wind.speed)} m/s`
+    humidity.textContent = `${Math.round(data.main.humidity)} %`
+    weatherDescription.textContent = data.weather[0].description
+    setLocalStorageCity()
+  } catch (error) {
+    alert(`${data.message}`)
+  }
 }
 
+function setLocalStorageCity() {
+  localStorage.setItem('userCity', city.value)
+}
+
+window.addEventListener('beforeunload', setLocalStorageCity)
+
+function getLocalStorageCity() {
+  if (localStorage.getItem('userCity')) {
+    city.value = localStorage.getItem('userCity')
+  }
+}
+
+window.addEventListener('load', getLocalStorageCity)
 getWeather()
 //4 weather
 //5 quote of the day
@@ -176,13 +198,22 @@ let playNum = 0
 
 audio.addEventListener('ended', playNext)
 
-play.addEventListener('click', doAudio)
+play.addEventListener('click', playAudio)
 playPrevBtn.addEventListener('click', playPrev)
 playNextBtn.addEventListener('click', playNext)
 
+function highLightSong() {
+  const playList = playListContainer.children
+  Array.from(playList).forEach(li => {
+    li.classList.remove('play-item__highlight')
+  })
+  playList[playNum].classList.add('play-item__highlight')
+}
+
 function setSrcAudio() {
   audio.src = playList[playNum].src
-  audio.currentTime = 0;  
+  audio.currentTime = 0;
+  highLightSong()  
 }
 
 function toggleBtn() {
@@ -190,31 +221,30 @@ function toggleBtn() {
 }
 
 function playAudio() {
-  isPlay = true
-  audio.play()
-}
-
-function pauseAudio() {
-  isPlay = false
-  audio.pause()
-}
-
-function doAudio() {
   if (isPlay === false) {
-    playAudio(); 
+    audio.play()
     toggleBtn()
+    isPlay = true
   } else {
-    pauseAudio()
+    audio.pause()
     toggleBtn()
+    isPlay = false
   }
 }
 
 function playPrev() {
   if (playNum === 0) playNum = playList.length - 1
   else playNum -= 1
-  console.log(playNum)
+
   setSrcAudio()
-  playAudio()
+
+  if (isPlay === false) {
+    isPlay = true
+    audio.play()
+    toggleBtn()
+  } else {
+    audio.play()
+  }
 }
 
 function playNext() {
@@ -222,7 +252,14 @@ function playNext() {
   else playNum += 1
 
   setSrcAudio()
-  playAudio()
+  
+  if (isPlay === false) {
+    isPlay = true
+    audio.play()
+    toggleBtn()
+  } else {
+    audio.play()
+  }
 }
 
 setSrcAudio()
@@ -239,7 +276,7 @@ setInterval(updateProgressBar, 500)
 function updateProgressBar() {
   playerProgress.max = audio.duration
   playerProgress.value = audio.currentTime
-  console.log(audio.currentTime)
+
   totalSongTime.innerHTML = formateTime(Math.floor(audio.duration))
 
   currentSongTime.innerHTML = formateTime(Math.round(audio.currentTime))
@@ -285,25 +322,31 @@ async function setBgUnsplash() {
   }
 }
 
-setBgUnsplash()
+//setBgUnsplash()
 
 const delay = ms => {
   return new Promise(r => setTimeout(() => r(), ms))
 }
-
+delay(5000)
 async function setBgFlicker() {
-  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=0a5fae729645a274e2453ad765cb4d96&tags=nature&extras=url_l&format=json&nojsoncallback=1`
   console.log('Flicker image generation...')
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=0a5fae729645a274e2453ad765cb4d96&tags=nature&extras=url_l&format=json&nojsoncallback=1`
   try {
     const response = await fetch(url)
     const data = await response.json()
-    console.log(data)
+    const photos = await data.photos
+    const photo = await photos.photo[0].url_l
+    console.log(photo)
     console.log('Flicker done')
+    const img = new Image()
+    img.src = photo
+    img.onload = () => {
+      body.style.backgroundImage = `url(${img.src})`
+    };
   } catch (error) {
     console.log('Flicker error')
   }
-
 }
-setBgFlicker()
+//setBgFlicker()
 
 //9 unsplash
