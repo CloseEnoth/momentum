@@ -196,6 +196,14 @@ playList.forEach(el => {
 let isPlay = false
 let playNum = 0
 
+const playerCurrentTrack = document.querySelector('.player-track')
+
+function showCurrentTrack() {
+  const playList = playListContainer.children
+  const currentTrack = playList[playNum].textContent
+  playerCurrentTrack.textContent = currentTrack
+}
+
 audio.addEventListener('ended', playNext)
 
 play.addEventListener('click', playAudio)
@@ -213,7 +221,8 @@ function highLightSong() {
 function setSrcAudio() {
   audio.src = playList[playNum].src
   audio.currentTime = 0;
-  highLightSong()  
+  highLightSong()
+  showCurrentTrack()  
 }
 
 function toggleBtn() {
@@ -268,6 +277,7 @@ setSrcAudio()
 const currentSongTime = document.querySelector('.player-current')
 const totalSongTime = document.querySelector('.player-total')
 const playerProgress = document.querySelector('.player-progress')
+
 
 playerProgress.addEventListener('change', changeProgressBar)
 

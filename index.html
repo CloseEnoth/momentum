@@ -11,14 +11,18 @@
 <body>
   <header class="header">
     <div class="player">
+      <div class="player-track"></div>
       <div class="player-time">
         <div class="player-current">0:00</div>
         <div class="player-total">1:25</div>
       </div>
       <input type="range" class="player-progress">
-        <div class="marker"></div>
-      </input>
-
+      <div class="player-volume">
+        <div class="player-muted">X</div>
+        <label for="volume">Volume</label>
+        <input name="volume" id="volume" type="range" class="player-volume">
+      </div>
+      
       <div class="player-controls">
         <button class="play-prev player-icon"></button>
         <button class="play player-icon"></button>
