@@ -24,7 +24,6 @@ function showDate() {
 
   const options = {weekday: 'long',month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
   const currentDate = todayDate.toLocaleDateString('en-US', options);
-  console.log(todayDate.toLocaleDateString('en-US', ))
   date.textContent = currentDate
 }
 
@@ -42,7 +41,7 @@ function getTimeOfDay() {
   return greetingArr[ Math.floor(hours / 6) ]
 }
 
-greeting.textContent = `Good ${getTimeOfDay()} <>`
+greeting.textContent = `Good ${getTimeOfDay()}`
 
 const userName = document.querySelector('.greeting-container input')
 
@@ -65,8 +64,6 @@ window.addEventListener('load', getLocalStorage)
 const body = document.body
 let randomNum = getRandomNum(1, 20)
 
-console.log(randomNum)
-
 function getRandomNum(start, end) {
   return Math.floor(Math.random() * end + start)
 }
@@ -76,7 +73,7 @@ function setBg(randomNum) {
   const bgNum = randomNum < 10 ? '0' + randomNum : randomNum
 
   const img = new Image()
-  img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+  img.src = `https://raw.githubusercontent.com/closeenoth/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
   img.onload = () => {
     body.style.backgroundImage = `url(${img.src})`
   };
@@ -193,6 +190,7 @@ playList.forEach(el => {
   playListContainer.append(li)
 })
 
+let isMuted = false
 let isPlay = false
 let playNum = 0
 
@@ -277,11 +275,35 @@ setSrcAudio()
 const currentSongTime = document.querySelector('.player-current')
 const totalSongTime = document.querySelector('.player-total')
 const playerProgress = document.querySelector('.player-progress')
+const playerMutedBtn = document.querySelector('.player-muted')
+const playerVolume = document.querySelector('.player-volume')
 
-
+playerVolume.addEventListener('change', changeVolume)
+playerMutedBtn.addEventListener('click', muteAudio)
 playerProgress.addEventListener('change', changeProgressBar)
 
 setInterval(updateProgressBar, 500)
+
+function changeVolume(e) {
+  audio.volume = parseFloat(e.target.value) / 10 
+}
+
+let volumeBeforeMuted = 0.5
+playerVolume.value = volumeBeforeMuted
+
+function muteAudio() {
+  
+  playerMutedBtn.classList.toggle('active')
+
+  if(isMuted === false) {
+    volumeBeforeMuted = audio.volume
+    isMuted = true
+    audio.volume = 0
+  } else {
+    isMuted = false
+    audio.volume = volumeBeforeMuted
+  }
+}
 
 function updateProgressBar() {
   playerProgress.max = audio.duration

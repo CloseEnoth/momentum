@@ -117,7 +117,21 @@ body {
 }
 
 .player-muted {
-  
+  display: block;
+  padding: 2px 4px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid white;
+  transition: background-color 0.5s ease;
+}
+.player-muted:hover {
+  background-color: rgb(67, 182, 118);
+}
+
+.player-muted.active {
+  background-color: rgb(67, 182, 118);
+  border: 1px solid black;
 }
 
 .player-volume input{
