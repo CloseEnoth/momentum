@@ -117,7 +117,6 @@ city.addEventListener('change', getWeather)
 
 async function getWeather() {
   let userCity
-  userCity = getLocalStorageCity()
   if (city.value == '') {
     userCity = city.placeholder
   } else {
@@ -134,7 +133,6 @@ async function getWeather() {
     wind.textContent = `${Math.round(data.wind.speed)} m/s`
     humidity.textContent = `${Math.round(data.main.humidity)} %`
     weatherDescription.textContent = data.weather[0].description
-    setLocalStorageCity()
   } catch (error) {
     alert(`${data.message}`)
   }
